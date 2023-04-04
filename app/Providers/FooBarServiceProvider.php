@@ -4,10 +4,18 @@ namespace App\Providers;
 
 use App\Data\Bar;
 use App\Data\Foo;
+use App\Services\Hello;
+use App\Services\HelloIndo;
+use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
 
-class FooBarServiceProvider extends ServiceProvider
+class FooBarServiceProvider extends ServiceProvider implements DeferrableProvider
 {
+    // property singletons untuk binding interface misalnya, bisa seperti ini jika sederhana
+    public array $singletons = [
+        Hello::class => HelloIndo::class
+    ];
+
     /**
      * Register services.
      *
@@ -15,6 +23,7 @@ class FooBarServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // echo "FooBar Service Provider" . PHP_EOL;
         $this->app->singleton(Foo::class, function () {
             return new Foo();
         });
@@ -32,5 +41,10 @@ class FooBarServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+    }
+    // lazy atau dipanggil jika memang di gunakan, kalau tidak, jangan di pakai
+    public function provides()
+    {
+        return [Hello::class, Foo::class, Bar::class];
     }
 }
