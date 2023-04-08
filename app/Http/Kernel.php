@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\SampleMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -29,12 +30,18 @@ class Kernel extends HttpKernel
      * @var array<string, array<int, class-string|string>>
      */
     protected $middlewareGroups = [
+        // membuat middleware group
+        'mizz' => [
+            // sample itu dari SampleMiddleware dan di sample menambahkan 2 param baru yaitu key dan status
+            // untuk mengirim param bisa menggunakan titik dua (:) dan pisahkan koma jika lebih dari 1 param nya 
+            "sample:MIZZ, 401"
+        ],
         'web' => [
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            // \App\Http\Middleware\VerifyCsrfToken::class,
+            \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
@@ -51,6 +58,7 @@ class Kernel extends HttpKernel
      * These middleware may be assigned to groups or used individually.
      *
      * @var array<string, class-string|string>
+     * Untuk Membuat alias. daripada kita cape2 bikin class yang panjang mending panggil aja nama alias nya
      */
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
@@ -63,5 +71,6 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'sample' => SampleMiddleware::class,
     ];
 }
